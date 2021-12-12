@@ -1,0 +1,25 @@
+mysql:
+  default: {
+    host: 127.0.0.1:3306,
+        dbname: test,
+        username: root,
+        password: slave_db01
+  }
+  slave_db01: {
+    host: 127.0.0.1:3306,
+    dbname: test,
+    username: root,
+    password: slave_db01
+  }
+  user_center: {
+    host: 127.0.0.1:3306,
+    dbname: test,
+    username: root,
+    password: user_center
+  }
+  data_center: {
+    host: 127.0.0.1:3306,
+    dbname: test,
+    username: root,
+    password: data_center
+  }
