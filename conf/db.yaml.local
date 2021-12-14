@@ -1,9 +1,9 @@
 mysql:
   default: {
     host: 127.0.0.1:3306,
-        dbname: test,
-        username: root,
-        password: slave_db01
+    dbname: test,
+    username: root,
+    password: slave_db01
   }
   slave_db01: {
     host: 127.0.0.1:3306,
