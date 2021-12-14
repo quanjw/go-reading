@@ -7,9 +7,10 @@ import (
 )
 
 type UserModel struct {
-	Username string
-	Password string
-	Email    string
+	Username      string `form:"username" binding:"required"`
+	Email         string `form:"email"  binding:"required,email"`
+	Password      string `form:"password" binding:"required"`
+	PasswordAgain string `form:"password-again" binding:"eqfield=Password"`
 }
 
 func (user *UserModel) Save() int64 {
