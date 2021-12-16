@@ -24,14 +24,18 @@ func performRequest(r http.Handler, method, path string, body io.Reader, headers
 func TestSetupRouter(t *testing.T) {
 
 	value := url.Values{}
-	value.Add("username", "admin")
-	value.Add("email", "admin@gmail.com")
+	value.Add("username", "quanjw")
+	value.Add("email", "quanjw@gmail.com")
 	value.Add("password", "123456")
 	value.Add("password-again", "123456")
 
 	headers := map[string]string{
 		"Content-Type": "application/x-www-form-urlencoded; param=value",
 	}
+
+	valueLogin := url.Values{}
+	valueLogin.Add("email", "quanjw@gmail.com")
+	valueLogin.Add("password", "123456")
 
 	testCases := []struct {
 		routerPath string
@@ -40,7 +44,7 @@ func TestSetupRouter(t *testing.T) {
 		headers    map[string]string
 	}{
 		{"/ping", http.MethodGet, nil, nil},
-		{"/user/login", http.MethodPost, nil, nil},
+		{"/user/login", http.MethodPost, bytes.NewBufferString(valueLogin.Encode()), headers},
 		//{"/user/register", http.MethodPost},
 		{"/user/register", http.MethodPost, bytes.NewBufferString(value.Encode()), headers},
 	}
@@ -54,7 +58,6 @@ func TestSetupRouter(t *testing.T) {
 			var dat map[string]interface{}
 			if err := json.Unmarshal([]byte(w.Body.String()), &dat); err == nil {
 				t.Log(dat)
-				t.Log(dat["success"])
 			}
 			assert.Equal(t, "true", dat["success"])
 		})
