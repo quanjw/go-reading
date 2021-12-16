@@ -36,7 +36,6 @@ func TestSetupRouter(t *testing.T) {
 	valueLogin := url.Values{}
 	valueLogin.Add("email", "quanjw@gmail.com")
 	valueLogin.Add("password", "123456")
-
 	testCases := []struct {
 		routerPath string
 		httpMethod string

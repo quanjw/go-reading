@@ -15,14 +15,12 @@ type UserModel struct {
 }
 
 func (user *UserModel) Save() int64 {
-
 	result, err := initDB.Db.Exec("insert into gr_user (username,email, password) values (?,?,?);", user.Username, user.Email, user.Password)
 	if err != nil {
 		panic(err.Error())
 	}
 
 	lastId, err := result.LastInsertId()
-
 	if err != nil {
 		log.Fatal(err)
 	}
