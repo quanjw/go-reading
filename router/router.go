@@ -3,6 +3,8 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"go-reading/handler"
+	"go-reading/utils"
+	"net/http"
 	"os"
 	"path/filepath"
 )
@@ -35,6 +37,8 @@ func SetupRouter() *gin.Engine {
 	{
 		noteRouter.POST("/upload", handler.UploadNote)
 	}
+
+	r.StaticFS("/upload", http.Dir(utils.RootPath()+"upload/"))
 
 	return r
 }

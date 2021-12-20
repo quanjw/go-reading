@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"strconv"
 	"time"
@@ -24,18 +25,25 @@ func UploadNote(c *gin.Context) {
 	t := time.Now()
 	formatted := fmt.Sprintf("%d/%02d/%02d/",
 		t.Year(), t.Month(), t.Day())
-	path := filepath.Join(utils.RootPath(), "upload/", formatted)
-	e = os.MkdirAll(path, os.ModePerm)
+	uploadPath := filepath.Join(utils.RootPath(), "upload/", formatted)
+	e = os.MkdirAll(uploadPath, os.ModePerm)
 	if e != nil {
 		log.Panicln("创建文件夹失败", e.Error())
 	}
-	fileName := strconv.FormatInt(time.Now().Unix(), 10) + file.Filename
 
-	dst := filepath.Join(path, file.Filename)
+	extString := path.Ext(file.Filename)
+	fileName := strconv.FormatInt(time.Now().Unix(), 10) + extString
+
+	dst := filepath.Join(uploadPath, fileName)
 	e = c.SaveUploadedFile(file, dst)
 	if e != nil {
 		log.Panicln("无法保存文件", e.Error())
 	}
-	log.Println(path + fileName)
 
+	data := gin.H{
+		"success":   "true",
+		"message":   "上传成功！",
+		"file_path": dst,
+	}
+	c.JSON(http.StatusOK, data)
 }
