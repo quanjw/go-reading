@@ -23,7 +23,7 @@ var Db *sql.DB
 
 func init() {
 	//传入配置路径
-	yamlFile, err := ioutil.ReadFile("../conf/db.yaml")
+	yamlFile, err := ioutil.ReadFile("./conf/db.yaml")
 	if err != nil {
 		log.Panicln("err:", err.Error())
 	}

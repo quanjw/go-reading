@@ -31,5 +31,10 @@ func SetupRouter() *gin.Engine {
 		userRouter.POST("/login", handler.Login)
 	}
 
+	noteRouter := r.Group("/note")
+	{
+		noteRouter.POST("/upload", handler.UploadNote)
+	}
+
 	return r
 }
