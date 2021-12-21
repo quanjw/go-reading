@@ -3,6 +3,7 @@ package handler
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"go-reading/conf"
 	"go-reading/utils"
 	"log"
 	"net/http"
@@ -40,10 +41,12 @@ func UploadNote(c *gin.Context) {
 		log.Panicln("无法保存文件", e.Error())
 	}
 
+	url := conf.Baseurl + "/upload/" + formatted + fileName
+
 	data := gin.H{
 		"success":   "true",
 		"message":   "上传成功！",
-		"file_path": dst,
+		"file_path": url,
 	}
 	c.JSON(http.StatusOK, data)
 }
