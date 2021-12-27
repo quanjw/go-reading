@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func AdminIndex(c *gin.Context) {
+func Index(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"title": "go-reading",
 	})
