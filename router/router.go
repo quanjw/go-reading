@@ -29,7 +29,7 @@ func SetupRouter() *gin.Engine {
 
 	r.GET("/ping", ping)
 
-	r.GET("/index", handler.Index)
+	r.GET("/index", middleware.LoginAuth(), handler.Index)
 
 	userRouter := r.Group("/user")
 	{

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-reading/conf"
 	"go-reading/model"
 	"log"
 	"net/http"
@@ -42,6 +43,7 @@ func Login(c *gin.Context) {
 	} else {
 		user := loginUser.QueryByEmail()
 		if loginUser.Password == user.Password {
+			c.SetCookie("gin_user", strconv.FormatInt(user.Id, 10), 7*24*3600, "/", conf.Domain, false, true)
 			c.JSON(200, gin.H{
 				"message": "用户" + user.Username + "已登陆",
 				"success": "true",
