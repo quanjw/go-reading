@@ -40,6 +40,7 @@ func SetupRouter() *gin.Engine {
 	noteRouter := r.Group("/note")
 	{
 		noteRouter.POST("/upload", handler.UploadNote)
+		noteRouter.POST("/insert", handler.NoteInsert)
 	}
 
 	r.StaticFS("/upload", http.Dir(utils.RootPath()+"upload/"))

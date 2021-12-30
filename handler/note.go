@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"go-reading/conf"
+	"go-reading/model"
 	"go-reading/utils"
 	"log"
 	"net/http"
@@ -13,6 +14,10 @@ import (
 	"strconv"
 	"time"
 )
+
+func Insert(c *gin.Context) {
+
+}
 
 func UploadNote(c *gin.Context) {
 
@@ -48,4 +53,22 @@ func UploadNote(c *gin.Context) {
 		"uri":     uri,
 	}
 	c.JSON(http.StatusOK, data)
+}
+
+func NoteInsert(c *gin.Context) {
+	var note model.NoteModel
+	if err := c.ShouldBind(&note); err != nil {
+		log.Println("err ->", err.Error())
+		c.String(http.StatusBadRequest, "输入的数据不合法")
+	} else {
+		note.CreateTime = time.Now().Unix()
+		note.Status = 1
+
+		id := note.Insert()
+		data := gin.H{
+			"message": "笔记插入成功" + strconv.FormatInt(id, 10),
+			"success": "true",
+		}
+		c.JSON(200, data)
+	}
 }
