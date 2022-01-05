@@ -1,4 +1,4 @@
-package handler
+package note
 
 import (
 	"fmt"
@@ -14,10 +14,6 @@ import (
 	"strconv"
 	"time"
 )
-
-func Insert(c *gin.Context) {
-
-}
 
 func UploadNote(c *gin.Context) {
 
@@ -55,7 +51,7 @@ func UploadNote(c *gin.Context) {
 	c.JSON(http.StatusOK, data)
 }
 
-func NoteInsert(c *gin.Context) {
+func Insert(c *gin.Context) {
 	var note model.NoteModel
 	if err := c.ShouldBind(&note); err != nil {
 		log.Println("err ->", err.Error())
@@ -71,4 +67,49 @@ func NoteInsert(c *gin.Context) {
 		}
 		c.JSON(200, data)
 	}
+}
+
+func Delete(c *gin.Context) {
+	id := c.Param("id")
+	intId, err := strconv.Atoi(id)
+	if err != nil {
+		log.Panicln("id 不是 int 类型, id 转换失败", err.Error())
+	}
+	note := model.NoteModel{Id: int64(intId)}
+	note.DeleteOne()
+	data := gin.H{
+		"message": "删除成功",
+		"success": "true",
+	}
+	c.JSON(200, data)
+
+}
+
+func Get(c *gin.Context) {
+	id := c.Param("id")
+	intId, err := strconv.Atoi(id)
+	if err != nil {
+		log.Panicln("id 不是 int 类型, id 转换失败", err.Error())
+	}
+	note := model.NoteModel{Id: int64(intId)}
+	note.FindById()
+	data := gin.H{
+		"message": "查询成功",
+		"success": "true",
+		"note":    note,
+	}
+	c.JSON(200, data)
+
+}
+
+func GetAll(c *gin.Context) {
+	note := model.NoteModel{}
+	notes := note.GetAll()
+	data := gin.H{
+		"message": "查询成功",
+		"success": "true",
+		"notes":   notes,
+	}
+	c.JSON(200, data)
+
 }

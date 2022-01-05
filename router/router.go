@@ -3,6 +3,7 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"go-reading/handler"
+	"go-reading/handler/note"
 	"go-reading/middleware"
 	"go-reading/utils"
 	"net/http"
@@ -37,10 +38,13 @@ func SetupRouter() *gin.Engine {
 		userRouter.POST("/login", handler.Login)
 	}
 
-	noteRouter := r.Group("/note")
+	noteRouter := r.Group("")
 	{
-		noteRouter.POST("/upload", handler.UploadNote)
-		noteRouter.POST("/insert", handler.NoteInsert)
+		noteRouter.PUT("/note/:id", note.UploadNote)
+		noteRouter.GET("/note/:id", note.Get)
+		noteRouter.GET("/notes", note.GetAll)
+		noteRouter.POST("/note", note.Insert)
+		noteRouter.DELETE("/note/:id", note.Delete)
 	}
 
 	r.StaticFS("/upload", http.Dir(utils.RootPath()+"upload/"))
