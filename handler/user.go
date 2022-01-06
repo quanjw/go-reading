@@ -35,6 +35,15 @@ func Register(c *gin.Context) {
 
 }
 
+// Login PingExample godoc
+// @Summary user login
+// @Schemes
+// @Description user login
+// @Tags user
+// @Accept json
+// @Produce json
+// @Success 200 {string} success
+// @Router /user/login [post]
 func Login(c *gin.Context) {
 	var loginUser model.LoginUser
 	if err := c.Bind(&loginUser); err != nil {

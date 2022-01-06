@@ -2,6 +2,9 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
+	swaggerfiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"go-reading/docs"
 	"go-reading/handler"
 	"go-reading/handler/note"
 	"go-reading/middleware"
@@ -11,11 +14,35 @@ import (
 	"path/filepath"
 )
 
+// PingExample godoc
+// @Summary ping pong
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} pong
+// @Router /ping [get]
 func ping(c *gin.Context) {
 	c.JSON(200, gin.H{
 		"message": "pong",
 		"success": "true",
 	})
+}
+
+// @BasePath /api/v1
+
+// PingExample godoc
+// @Summary ping example
+// @Schemes
+// @Description do ping
+// @Tags example
+// @Accept json
+// @Produce json
+// @Success 200 {string} Helloworld
+// @Router /example/helloworld [get]
+func Helloworld(g *gin.Context) {
+	g.JSON(http.StatusOK, "helloworld")
 }
 
 func SetupRouter() *gin.Engine {
@@ -24,11 +51,20 @@ func SetupRouter() *gin.Engine {
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery(), middleware.CostTimeLog())
 
+	docs.SwaggerInfo.BasePath = "/api/v1"
+	v1 := r.Group("/api/v1")
+	{
+		eg := v1.Group("/example")
+		{
+			eg.GET("/helloworld", Helloworld)
+			eg.GET("/ping", ping)
+		}
+	}
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+
 	//r.LoadHTMLGlob("templates/*")
 	r.LoadHTMLGlob(filepath.Join(os.Getenv("GOPATH"), "src/go-reading/templates/*"))
 	r.Static("/statics", "./statics")
-
-	r.GET("/ping", ping)
 
 	r.GET("/index", middleware.LoginAuth(), handler.Index)
 
