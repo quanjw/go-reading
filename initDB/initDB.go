@@ -3,8 +3,9 @@ package initDB
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
 	"gopkg.in/yaml.v2"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 	"io/ioutil"
 	"log"
 )
@@ -39,10 +40,12 @@ func init() {
 		log.Panicln("err:", "db default no set")
 	}
 
-	Db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", db.Username, db.Password, db.Host, db.Dbname))
+	sqlDB, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", db.Username, db.Password, db.Host, db.Dbname))
+	Db, err := gorm.Open(mysql.New(mysql.Config{
+		Conn: sqlDB,
+	}), &gorm.Config{})
+
 	if err != nil {
 		log.Panicln("err:", err.Error())
 	}
-	Db.SetMaxOpenConns(10)
-	Db.SetMaxIdleConns(10)
 }
