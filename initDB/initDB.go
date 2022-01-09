@@ -20,7 +20,9 @@ type Config struct {
 	Mysql map[string]conn
 }
 
-var Db *sql.DB
+var Db *gorm.DB
+
+//var Db *sql.DB
 
 func init() {
 	//传入配置路径
@@ -41,7 +43,7 @@ func init() {
 	}
 
 	sqlDB, err := sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s)/%s", db.Username, db.Password, db.Host, db.Dbname))
-	Db, err := gorm.Open(mysql.New(mysql.Config{
+	Db, err = gorm.Open(mysql.New(mysql.Config{
 		Conn: sqlDB,
 	}), &gorm.Config{})
 
