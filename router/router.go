@@ -50,6 +50,7 @@ func SetupRouter() *gin.Engine {
 	//r := gin.Default()
 	r := gin.New()
 	r.Use(gin.Logger(), gin.Recovery(), middleware.CostTimeLog())
+	r.SetTrustedProxies([]string{"192.168.1.1"})
 
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	v1 := r.Group("/api/v1")
