@@ -57,9 +57,7 @@ func Insert(c *gin.Context) {
 		log.Println("err ->", err.Error())
 		c.String(http.StatusBadRequest, "输入的数据不合法")
 	} else {
-		note.CreateTime = time.Now().Unix()
 		note.Status = 1
-
 		id := note.Insert()
 		data := gin.H{
 			"message": "笔记插入成功" + strconv.FormatInt(id, 10),
@@ -91,12 +89,18 @@ func Get(c *gin.Context) {
 	if err != nil {
 		log.Panicln("id 不是 int 类型, id 转换失败", err.Error())
 	}
-	note := model.NoteModel{Id: int64(intId)}
-	note.FindById()
+	note := model.NoteModel{}
+	note.FindById(int64(intId))
 	data := gin.H{
 		"message": "查询成功",
 		"success": "true",
 		"note":    note,
+	}
+	if note == (model.NoteModel{}){
+		data = gin.H{
+			"message": "数据为空",
+			"success": "true",
+		}
 	}
 	c.JSON(200, data)
 
