@@ -72,7 +72,7 @@ func Login(c *gin.Context) {
 				c.JSON(200, gin.H{
 					"message": "用户" + user.Username + "已登陆",
 					"success": "true",
-					"data":    token,
+					"data":    "Bearer " + token,
 				})
 			} else {
 				c.JSON(200, gin.H{
